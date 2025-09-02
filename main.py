@@ -7,13 +7,9 @@ Two recommended strategies:
   - If --translate: attempt local translation (requires transformers + sentencepiece + torch).
 
 Usage:
-    python semantic_group_files_fixed.py --input_dir ./texts --output clusters.csv
-    python semantic_group_files_fixed.py --input_dir ./texts --output clusters.csv --translate
-    python semantic_group_files_fixed.py --input_dir ./texts --output clusters.csv --model paraphrase-multilingual-MiniLM-L12-v2
-
-Notes:
-  - If you want translation to work locally, install: pip install transformers sentencepiece torch
-  - Best quick fix: use a multilingual model like "paraphrase-multilingual-MiniLM-L12-v2".
+    python main.py --input_dir ./texts --output clusters.csv
+    python main.py --input_dir ./texts --output clusters.csv --translate
+    python main.py --input_dir ./texts --output clusters.csv --model paraphrase-multilingual-MiniLM-L12-v2
 """
 
 import os
@@ -36,7 +32,7 @@ try:
 except Exception:
     _LANGDETECT_AVAILABLE = False
 
-# local translation (optional)
+# local translation
 try:
     from transformers import pipeline
     import sentencepiece
@@ -135,7 +131,6 @@ def translate_to_english_local(texts, source_languages):
 
     for txt, lang in zip(texts, source_languages):
         if lang not in translators or translators.get(lang) is None:
-            # no translator for this language or translator failed: keep original
             translated_texts.append(txt)
             final_langs.append(lang)
             continue
@@ -146,7 +141,7 @@ def translate_to_english_local(texts, source_languages):
             for s in sentences:
                 if len(s) == 0:
                     continue
-                # truncate extremely long lines to avoid model issues
+                # truncate long lines to avoid model issues
                 piece = s[:800]
                 res = translators[lang](piece)
                 if isinstance(res, list) and len(res) > 0:
