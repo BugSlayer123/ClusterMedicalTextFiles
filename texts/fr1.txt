@@ -1,1 +1,2 @@
 Médecin : Depuis quand avez-vous de la fièvre ? Patient : Depuis trois jours, avec des maux de tête constants. Médecin : Avez-vous pris quelque chose pour soulager les symptômes ? Patient : Juste du paracétamol, mais ça ne change rien.
+Médecin : La patiente AYA présente des signes de résistance à l’insuline. Infirmière : Devrions-nous également dépister le SOPK ? Médecin : Oui, c’est fréquent dans ce groupe démographique.

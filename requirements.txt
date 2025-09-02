@@ -1,10 +1,12 @@
-sentence-transformers
-scikit-learn
-pandas
+sentence-transformers~=4.1.0
+scikit-learn~=1.6.1
+pandas~=2.3.1
 tqdm
-numpy
+numpy~=2.3.1
 langdetect
 transformers
 sentencepiece
 torch
-hdbscan
+hdbscan~=0.8.40
+
+PyQt5~=5.15.11

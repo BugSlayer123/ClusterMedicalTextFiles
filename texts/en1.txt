@@ -1,1 +1,2 @@
 Doctor: What symptoms are you experiencing? Patient: I feel tired all the time and get dizzy when I stand up. Doctor: Have you had any recent illnesses? Patient: Just a cold two weeks ago.
+Doctor: The patient falls within the AYA category, aged 19, presenting with a mediastinal mass. Resident: Should we follow the AYA-specific protocol for lymphoma staging? Doctor: Yes, including fertility preservation counseling.
