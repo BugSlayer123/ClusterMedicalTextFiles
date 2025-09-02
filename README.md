@@ -25,8 +25,6 @@ Clone this repository and install dependencies:
 git clone https://github.com/your-repo/semantic-group-files.git
 cd semantic-group-files
 pip install -r requirements.txt
-
-pip install -r requirements.txt
 ```
 ## Example usage
 ```
