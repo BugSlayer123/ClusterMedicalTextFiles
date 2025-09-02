@@ -25,3 +25,14 @@ Clone this repository and install dependencies:
 git clone https://github.com/your-repo/semantic-group-files.git
 cd semantic-group-files
 pip install -r requirements.txt
+
+pip install -r requirements.txt
+```
+## Example usage
+```
+python main.py --input_dir ./texts --output clusters.csv --translate 
+```
+Or with a multilingual model:
+```
+python main.py --input_dir ./texts --model "paraphrase-multilingual-MiniLM-L12-v2" --method kmeans --kmeans_k 6
+```
