@@ -1,0 +1,10 @@
+sentence-transformers
+scikit-learn
+pandas
+tqdm
+numpy
+langdetect
+transformers
+sentencepiece
+torch
+hdbscan
