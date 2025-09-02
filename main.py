@@ -47,6 +47,8 @@ try:
 except Exception:
     _HDBSCAN_AVAILABLE = False
 
+os.environ["TRANSFORMERS_OFFLINE"] = "1"
+os.environ["HF_HUB_OFFLINE"] = "1"
 
 def load_text_files(input_dir, pattern="*.txt"):
     paths = sorted(glob.glob(os.path.join(input_dir, pattern)))
@@ -99,15 +101,14 @@ def detect_language_for_docs(docs):
 def translate_to_english_local(texts, source_languages):
     """
     Translate texts to English using local Hugging Face models (Helsinki-NLP OPUS-MT).
-    Requires: transformers and sentencepiece installed.
-    If translator cannot be loaded or sentencepiece missing, returns originals and languages unchanged.
+    Only uses local files; will fail if models are not present.
     """
     if not _TRANSLATION_AVAILABLE:
         print("Warning: local translation not available. Install transformers, sentencepiece and torch to enable it:")
         print("  pip install transformers sentencepiece torch")
         return texts, source_languages
 
-    print("Loading translation pipelines (local)...")
+    print("Loading translation pipelines (local-only)...")
     translators = {}
 
     model_map = {
@@ -120,7 +121,11 @@ def translate_to_english_local(texts, source_languages):
         if code in model_map:
             model_name = model_map[code]
             try:
-                translators[code] = pipeline('translation', model=model_name, device=-1)
+                # load model & tokenizer locally only
+                from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
+                tokenizer = AutoTokenizer.from_pretrained(model_name, local_files_only=True)
+                model = AutoModelForSeq2SeqLM.from_pretrained(model_name, local_files_only=True)
+                translators[code] = pipeline("translation", model=model, tokenizer=tokenizer, device=-1)
                 print(f"Loaded translator for {code} -> en ({model_name})")
             except Exception as e:
                 print(f"Could not load translator {model_name}: {e}")
@@ -141,11 +146,9 @@ def translate_to_english_local(texts, source_languages):
             for s in sentences:
                 if len(s) == 0:
                     continue
-                # truncate long lines to avoid model issues
-                piece = s[:800]
+                piece = s[:800]  # truncate long lines
                 res = translators[lang](piece)
                 if isinstance(res, list) and len(res) > 0:
-                    # translation pipeline returns dict with 'translation_text'
                     out_sentences.append(res[0].get('translation_text', piece))
                 else:
                     out_sentences.append(piece)
@@ -384,7 +387,7 @@ def main(args):
     except Exception:
         device = None
 
-    model = SentenceTransformer(args.model)
+    model = SentenceTransformer(args.model, local_files_only=True)
 
     print("Building document embeddings...")
     doc_embeddings, chunks_per_doc = build_embeddings_for_documents(
